@@ -1,1 +1,4 @@
 falta fazer a funcao inicializar nos arquivos de entidade.
+fazer funcao B_cheia (entidades)
+fazer funcao B_espera_vazia (entidades)
+padronizar o estilo de codigo (principalmente as chaves)
