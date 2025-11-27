@@ -8,6 +8,9 @@
 #define MIN_HAB_HEROI 1
 #define MAX_HAB_HEROI 3
 #define N_HAB_TOTAL 10
+#define MIN_LOT_BASE 3
+#define MAX_LOT_BASE 10
+#define MIN_HAB_MISSAO 6
 
 int aleat (int min, int max) 
 	return rand() % (max - min + 1) + min;
@@ -23,23 +26,29 @@ struct heroi {
 	int *base; 					// id da base atual
 };
 
-int H_id (struct heroi *h)
+int H_id (struct heroi *h) {
 	return h->id;
-	
-struct cjto_t H_habilidades (struct heroi *h)
-	return h->habilidades;
-	
-int H_paciencia (struct heroi *h)
-	return h->paciencia;
-	
-int H_velocidade (struct heroi *h)
-	return h->velocidade;
-	
-int H_xp (struct heroi *h)
-	return h->xp;
+}
 
-int H_base (struct heroi *h)
+struct cjto_t H_habilidades (struct heroi *h) {
+	return h->habilidades;
+}
+
+int H_paciencia (struct heroi *h) {
+	return h->paciencia;
+}
+
+int H_velocidade (struct heroi *h) {
+	return h->velocidade;
+}
+
+int H_xp (struct heroi *h) {
+	return h->xp;
+}
+
+int H_base (struct heroi *h) {
 	return h->base;
+}
 
 int H_inicializa (struct heroi *h, int id) {
 	h->id = id;	
@@ -70,21 +79,27 @@ struct base {
 	int *local[2];				// localizacao cartesiana da base
 };
 
-int B_id (struct base *b)
+int B_id (struct base *b) {
 	return b->id;
+}
 	
-int B_lotacao (struct base *b)
+	
+int B_lotacao (struct base *b) {
 	return b->lotacao;
+}
 
-struct cjto_t B_presentes (struct base *b)
+struct cjto_t B_presentes (struct base *b) {
 	return b->presentes;
+}
 
-struct cjto_t B_espera (struct base *b)
+struct cjto_t B_espera (struct base *b) {
 	return b->espera;
+}
 
-int *B_local (struct base *b)
+int *B_local (struct base *b) {
 	return b->local;
-	
+}
+
 void B_altera_lotacao (struct base *b, int controle) {
 	if (controle)
 		b->lotacao++;
@@ -108,6 +123,27 @@ void B_remove_fila (struct base *b, struct heroi *h) {
 	fila_retira(b->espera, h->id);
 }
 
+int B_cheia (struct base *b) {
+	if (cjto_card(b->presentes) == b->lotacao)
+		return 1;
+		
+	return 0;
+}	
+
+int B_espera_vazia (struct base *b) {
+	if (fila_tamanho(b->espera) == 0)
+		return 1;
+		
+	return 0;
+}
+
+void B_inicializa (struct base *b, int id, int local[2]) {
+	b->id = id;
+	b->local = local;
+	b->lotacao = aleat(MIN_LOT_BASE, MAX_LOT_BASE);
+	b->presentes = cjto_cria(b->lotacao);
+	b->espera = fila_cria();
+}
 
 //missao
 
@@ -117,12 +153,20 @@ struct missao {
 	int *local[2];				// localizacao cartesiana da missao
 };
 
-int MI_id (struct missao *m)
+int MI_id (struct missao *m) {
 	return m->id;
-	
-struct cjto_t MI_habilidades (struct missao *m)
-	return m->habilidades;
-	
-int *MI_local (struct missao *m)
-	return m->local;
+}
 
+struct cjto_t MI_habilidades (struct missao *m) {
+	return m->habilidades;
+}
+
+int *MI_local (struct missao *m) {
+	return m->local;
+}
+
+int MI_inicializa (struct missao *m, int id, int local[2]) {
+	m->id = id;
+	m->local = local;
+	m->habilidades = cjto_aleat(aleat(MIN_HAB_MISSAO, N_HAB_TOTAL), N_HAB_TOTAL);
+}

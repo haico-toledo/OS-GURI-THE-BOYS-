@@ -78,8 +78,14 @@ void B_insere_fila (struct base *b, struct heroi *h);
 //remove heroi na primeira posicao da espera
 void B_remove_fila (struct base *b, struct heroi *h);
 
+//retorna 1 se a base esta cheia e 0 caso contrario
+void B_cheia (struct base *b);
+
+//retorna 1 se a fila de espera esta vazia e 0 caso contrario
+void B_espera_vazia (struct base *b);
+
 //inicializa os atributos da base
-int B_inicializa (struct base *b);
+int B_inicializa (struct base *b, int id, int local[2]);
 
 //missao
 
@@ -93,7 +99,7 @@ struct cjto_t MI_habilidades (struct missao *m);
 int *MI_local (struct missao *m);
 
 //inicializa os atributos da missao
-int MI_inicializa (struct missao *m);
+int MI_inicializa (struct missao *m, int id, int local[2]);
 
 
 

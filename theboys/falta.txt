@@ -1,4 +1,22 @@
-falta fazer a funcao inicializar nos arquivos de entidade.
-fazer funcao B_cheia (entidades)
-fazer funcao B_espera_vazia (entidades)
-padronizar o estilo de codigo (principalmente as chaves)
+fazer funcao B_cheia (entidades) FEITO
+fazer funcao B_espera_vazia (entidades) FEITO
+falta fazer a funcao inicializar nos arquivos de entidade. (base e missao faltam) FEITO
+
+fazer funcoes H_cria, B_cria e M_cria e seus X_destroi
+fazer funcao inicializa mundo
+padronizar o estilo de codigo:
+	chaves
+	parenteses das funcoes
+	colocar as funcoes inicializa proximas dos structs no entidades .c e .h
+	colocar os comentarios em cima do codigo
+
+
+proximos passos:
+	inicializar o mundo, herois, bases e missoes no theboys.c
+	cria e inicializa a lef
+	inserir o evento fim na lef com prio tempo_max
+	entrar no laco principal que depende do (nao fim) 
+		remove um evento da lef e coloca o tipo numa variavel TIPO
+		switch com a variavel tipo
+			chama a funcao do evento com base no tipo (executa o evento)
+		aumenta o numero de eventos tratados
