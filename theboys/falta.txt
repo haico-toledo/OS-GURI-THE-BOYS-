@@ -2,21 +2,30 @@ fazer funcao B_cheia (entidades) FEITO
 fazer funcao B_espera_vazia (entidades) FEITO
 falta fazer a funcao inicializar nos arquivos de entidade. (base e missao faltam) FEITO
 
-fazer funcoes H_cria, B_cria e M_cria e seus X_destroi
-fazer funcao inicializa mundo
+fazer funcoes cria heroi, base, missao dinamicas!!!! (falta base destroi e os da missao)
+fazer funcoes destroi heroi, base, missao //ver nomes no theboys.c e colocar igual no entidades.h
 padronizar o estilo de codigo:
 	chaves
 	parenteses das funcoes
 	colocar as funcoes inicializa proximas dos structs no entidades .c e .h
 	colocar os comentarios em cima do codigo
-
+	padronizar comentarios em geral
+	rever os defines do entidades, poderiam ser trocados por variaveis
+verificar se os allocs funcionam antes de retornar das funcoes cria no entidades
 
 proximos passos:
-	inicializar o mundo, herois, bases e missoes no theboys.c
+	fazer funcao inicializa mundo FEITO
+	inicializar as entidades
+	atribuir base para os herois e setar as missoes (.6 no pdf)
 	cria e inicializa a lef
+	inicializar o mundo, herois, bases e missoes no theboys.c
 	inserir o evento fim na lef com prio tempo_max
 	entrar no laco principal que depende do (nao fim) 
 		remove um evento da lef e coloca o tipo numa variavel TIPO
 		switch com a variavel tipo
 			chama a funcao do evento com base no tipo (executa o evento)
 		aumenta o numero de eventos tratados
+		
+		
+	lembrar de desalocar:
+	mundo (theboys.c)

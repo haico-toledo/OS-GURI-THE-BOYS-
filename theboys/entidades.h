@@ -17,6 +17,12 @@ struct missao;
 
 //heroi
 
+//cria um heroi com o id dado
+struct heroi *H_cria (int id);
+
+//libera a memoria alocada para o heroi
+struct heroi H_destroi (struct heroi *h);
+
 //retorna o id do heroi
 int H_id (struct heroi *h);
 
@@ -46,6 +52,9 @@ void H_muda_base (struct heroi *h, struct base *nova);
 
 
 //base
+
+//cria base com id e local indicados
+struct base *B_cria (int id, int local[2]);
 
 //retorna o id da base
 int B_id (struct base *b);

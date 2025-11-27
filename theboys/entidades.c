@@ -26,6 +26,19 @@ struct heroi {
 	int *base; 					// id da base atual
 };
 
+struct heroi *H_cria (int id) {
+	struct heroi *h = malloc(sizeof(struct heroi));
+	h->id = id;
+	
+	return h;
+	
+}
+
+void H_destroi (struct heroi *h) {
+	free(h);
+	h = NULL;
+}
+
 int H_id (struct heroi *h) {
 	return h->id;
 }
@@ -78,6 +91,15 @@ struct base {
 	struct fila_t *espera;		// fila de herois esperando para entrar
 	int *local[2];				// localizacao cartesiana da base
 };
+
+struct base *B_cria (int id, int local[2]) {
+	struct base *b = malloc(sizeof(struct base));
+	b->id = id;
+	b->local = local;
+	
+	return b;
+}
+
 
 int B_id (struct base *b) {
 	return b->id;
