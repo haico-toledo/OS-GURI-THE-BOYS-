@@ -28,7 +28,11 @@ struct heroi {
 
 struct heroi *H_cria (int id) {
 	struct heroi *h = malloc(sizeof(struct heroi));
-	h->id = id;
+	h->id = id;	
+	h->xp = 0;
+	h->paciencia = aleat(MIN_PAC, MAX_PAC);											//paciencia entre 0 e 100
+	h->velocidade = aleat(MIN_VEL, MAX_VEL); 										//velocidade entre 50 e 5000
+	h->habilidades = cjto_aleat(aleat(MIN_HAB_HEROI, MAX_HAB_HEROI), N_HAB_TOTAL);	//sorteia de 1 a 3 habilidades das 10 possiveis
 	
 	return h;
 	
@@ -62,14 +66,6 @@ int H_xp (struct heroi *h) {
 int H_base (struct heroi *h) {
 	return h->base;
 }
-
-int H_inicializa (struct heroi *h, int id) {
-	h->id = id;	
-	h->xp = 0;
-	h->paciencia = aleat(MIN_PAC, MAX_PAC);											//paciencia entre 0 e 100
-	h->velocidade = aleat(MIN_VEL, MAX_VEL); 										//velocidade entre 50 e 5000
-	h->habilidades = cjto_aleat(aleat(MIN_HAB_HEROI, MAX_HAB_HEROI), N_HAB_TOTAL);	//sorteia de 1 a 3 habilidades das 10 possiveis
-}
 	
 //incrementa 1 de xp
 void H_incrementa_xp (struct heroi *h) {
@@ -96,10 +92,17 @@ struct base *B_cria (int id, int local[2]) {
 	struct base *b = malloc(sizeof(struct base));
 	b->id = id;
 	b->local = local;
+	b->lotacao = aleat(MIN_LOT_BASE, MAX_LOT_BASE);
+	b->presentes = cjto_cria(b->lotacao);
+	b->espera = fila_cria();
 	
 	return b;
 }
 
+void B_destroi (struct base *b) {
+	free(b);
+	b = NULL;
+}
 
 int B_id (struct base *b) {
 	return b->id;
@@ -159,14 +162,6 @@ int B_espera_vazia (struct base *b) {
 	return 0;
 }
 
-void B_inicializa (struct base *b, int id, int local[2]) {
-	b->id = id;
-	b->local = local;
-	b->lotacao = aleat(MIN_LOT_BASE, MAX_LOT_BASE);
-	b->presentes = cjto_cria(b->lotacao);
-	b->espera = fila_cria();
-}
-
 //missao
 
 struct missao {
@@ -174,6 +169,20 @@ struct missao {
 	struct cjto_t *habilidades;	// conjunto de habilidades necessarias
 	int *local[2];				// localizacao cartesiana da missao
 };
+
+struct missao *MI_cria (int id, int local[2]) {
+	struct missao *m = malloc(sizeof(struct missao));
+	m->id = id;
+	m->local = local;
+	m->habilidades = cjto_aleat(aleat(MIN_HAB_MISSAO, N_HAB_TOTAL), N_HAB_TOTAL);
+	
+	return m;
+}
+
+void MI_destroi (struct missao *m) {
+	free(m);
+	m = NULL;
+}
 
 int MI_id (struct missao *m) {
 	return m->id;
@@ -187,8 +196,3 @@ int *MI_local (struct missao *m) {
 	return m->local;
 }
 
-int MI_inicializa (struct missao *m, int id, int local[2]) {
-	m->id = id;
-	m->local = local;
-	m->habilidades = cjto_aleat(aleat(MIN_HAB_MISSAO, N_HAB_TOTAL), N_HAB_TOTAL);
-}

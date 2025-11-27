@@ -1,31 +1,46 @@
 fazer funcao B_cheia (entidades) FEITO
 fazer funcao B_espera_vazia (entidades) FEITO
 falta fazer a funcao inicializar nos arquivos de entidade. (base e missao faltam) FEITO
+fazer funcoes cria heroi, base, missao dinamicas!!!! FEITO
+fazer funcoes destroi heroi, base, missao FEITO
 
-fazer funcoes cria heroi, base, missao dinamicas!!!! (falta base destroi e os da missao)
-fazer funcoes destroi heroi, base, missao //ver nomes no theboys.c e colocar igual no entidades.h
 padronizar o estilo de codigo:
 	chaves
 	parenteses das funcoes
 	colocar as funcoes inicializa proximas dos structs no entidades .c e .h
 	colocar os comentarios em cima do codigo
 	padronizar comentarios em geral
-	rever os defines do entidades, poderiam ser trocados por variaveis
 verificar se os allocs funcionam antes de retornar das funcoes cria no entidades
+apontar os campos das struct para nulo nas funcoes cria do entidades
+verificar se o mundo eh nulo no theboys.c
+pode ser preciso trocar local[2] por local_x e local_y em tudo
+comentar os eventos.h
+remover comentarios com ** (theboys.c)
 
-proximos passos:
+PROGRAMA PRINCIPAL:
 	fazer funcao inicializa mundo FEITO
-	inicializar as entidades
-	atribuir base para os herois e setar as missoes (.6 no pdf)
-	cria e inicializa a lef
-	inicializar o mundo, herois, bases e missoes no theboys.c
-	inserir o evento fim na lef com prio tempo_max
+	
+	criar e inicializar as entidades FEITO
+		{loop que cria os herois e atribui ao vetor herois
+			chama a funcao cria com i
+		loop que cria as bases e atribui ao vetor bases
+			chama cria com i no id e no 2 aleat no local
+		loop que cria as missoes e atribui ao vetor missoes} FEITO
+		
+	TROCAR OS DEFINES DO ENTIDADES POR VARIAVEIS E PASSAR NO THEBOYS.C!!!!! //deixei por hora
+
+	cria e inicializa a lef FEITO
+		{atribuir base para os herois e setar as missoes (.6 no pdf) FEITO
+		inserir o evento fim na lef com prio tempo_max} FEITO
+		
 	entrar no laco principal que depende do (nao fim) 
 		remove um evento da lef e coloca o tipo numa variavel TIPO
 		switch com a variavel tipo
 			chama a funcao do evento com base no tipo (executa o evento)
 		aumenta o numero de eventos tratados
+	ver quais variaveis preciso adicionar no codigo principal para fazer as estatisticas
 		
 		
 	lembrar de desalocar:
-	mundo (theboys.c)
+	mundo (theboys.c) --- nao tem funcao
+	entidades (theboys.h) --- tem as funcoes para dar o free

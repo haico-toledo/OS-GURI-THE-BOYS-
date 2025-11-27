@@ -14,6 +14,8 @@ struct missao;
 
 //funcoes para as entidades
 
+//retorna um numero aleatorio entre min e max
+int aleat (int min, int max);
 
 //heroi
 
@@ -41,9 +43,6 @@ int H_xp (struct heroi *h);
 //retorna a base atual do heroi
 int H_base (struct heroi h);
 
-//inicializa os atributos do heroi
-int H_inicializa (struct heroi *h);
-
 //incrementa 1 de xp
 void H_incrementa_xp (struct heroi *h);
 
@@ -55,6 +54,9 @@ void H_muda_base (struct heroi *h, struct base *nova);
 
 //cria base com id e local indicados
 struct base *B_cria (int id, int local[2]);
+
+//libera memoria alocada para a base
+void B_destroi (struct base *b);
 
 //retorna o id da base
 int B_id (struct base *b);
@@ -93,10 +95,13 @@ void B_cheia (struct base *b);
 //retorna 1 se a fila de espera esta vazia e 0 caso contrario
 void B_espera_vazia (struct base *b);
 
-//inicializa os atributos da base
-int B_inicializa (struct base *b, int id, int local[2]);
-
 //missao
+
+//cria missao com id e local dados
+struct missao *MI_cria (int id, int local[2]);
+
+//libera memoria alocada para a missao
+void MI_destroi (struct missao *m);
 
 //retorna o id da missao
 int MI_id (struct missao *m);
@@ -107,8 +112,6 @@ struct cjto_t MI_habilidades (struct missao *m);
 //retorna o local cartesiano da missao
 int *MI_local (struct missao *m);
 
-//inicializa os atributos da missao
-int MI_inicializa (struct missao *m, int id, int local[2]);
 
 
 
