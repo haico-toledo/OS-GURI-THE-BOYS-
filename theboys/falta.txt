@@ -16,6 +16,8 @@ verificar se o mundo eh nulo no theboys.c
 pode ser preciso trocar local[2] por local_x e local_y em tudo
 comentar os eventos.h
 remover comentarios com ** (theboys.c)
+testar todos os parametros com ponteiro (alocado) das funcoes antes de usar (todos os arquivos)
+ajustar a ordem dos parametros nas funcoes, struct primeiro int depois
 
 PROGRAMA PRINCIPAL:
 	fazer funcao inicializa mundo FEITO
@@ -40,7 +42,11 @@ PROGRAMA PRINCIPAL:
 		aumenta o numero de eventos tratados
 	ver quais variaveis preciso adicionar no codigo principal para fazer as estatisticas
 		
-		
 	lembrar de desalocar:
 	mundo (theboys.c) --- nao tem funcao
 	entidades (theboys.h) --- tem as funcoes para dar o free
+	
+	EVENTOS:
+		fazer o print das funcoes
+		eventos futuros de herois mortos devem ser ignorados (checar sempre se ta vivo)
+		

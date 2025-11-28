@@ -4,23 +4,24 @@
 #include "entidades.h"
 #include "fprio.h"
 
+
 struct E_chega {
 	int tempo;
-	struct heroi *heroi;
+	struct heroi *h;
 	struct base *b;
 	int tipo;
 };
 
 struct E_espera {
 	int tempo;
-	struct heroi *heroi;
+	struct heroi *h;
 	struct base *b;	
 	int tipo;
 };
 
 struct E_desiste {
 	int tempo;
-	struct heroi *heroi;
+	struct heroi *h;
 	struct base *b;	
 	int tipo;
 };
@@ -33,95 +34,28 @@ struct E_avisa {
 
 struct E_entra {
 	int tempo;
-	struct heroi *heroi;
+	struct heroi *h;
 	struct base *b;	
 	int tipo;
 };
 
 struct E_sai {
 	int tempo;
-	struct heroi *heroi;
+	struct heroi *h;
 	struct base *b;	
 	int tipo;
 };
 
 struct E_viaja {
 	int tempo;
-	struct heroi *heroi;
+	struct heroi *h;
 	struct base *d;	
 	int tipo;
 };
 
 struct E_morre {
 	int tempo;
-	struct heroi *heroi;
-	struct base *b;	
-	int tipo;
-};
-
-struct E_missao {
-	int tempo;
-	struct missao *m;
-	int tipo;
-};
-
-struct E_fim {
-	int tempo;
-	int tipo;
-};
-
-
-struct E_chega {
-	int tempo;
-	struct heroi *heroi;
-	struct base *b;
-	int tipo;
-};
-
-struct E_espera {
-	int tempo;
-	struct heroi *heroi;
-	struct base *b;	
-	int tipo;
-};
-
-struct E_desiste {
-	int tempo;
-	struct heroi *heroi;
-	struct base *b;	
-	int tipo;
-};
-
-struct E_avisa {
-	int tempo;
-	struct base *b;	
-	int tipo;
-};
-
-struct E_entra {
-	int tempo;
-	struct heroi *heroi;
-	struct base *b;	
-	int tipo;
-};
-
-struct E_sai {
-	int tempo;
-	struct heroi *heroi;
-	struct base *b;	
-	int tipo;
-};
-
-struct E_viaja {
-	int tempo;
-	struct heroi *heroi;
-	struct base *d;	
-	int tipo;
-};
-
-struct E_morre {
-	int tempo;
-	struct heroi *heroi;
+	struct heroi *h;
 	struct base *b;	
 	int tipo;
 };
@@ -144,7 +78,7 @@ void chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *ti
 void insere_chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
 
 //executa o evento espera
-void espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
 //cria e insere o evento espera
 void insere_espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
 
@@ -154,17 +88,17 @@ void desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *
 void insere_desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
 
 //executa o evento avisa
-void avisa (int t, struct base *b, struct fprio_t *lef, int *tipo);
+void avisa (int t, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
 //cria e insere o evento avisa
 void insere_avisa (int t, struct base *b, struct fprio_t *lef, int *tipo);
 
 //executa o evento entra
-void entra (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void entra (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
 //cria e insere o evento entra
 void insere_entra (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
 
 //executa o evento sai
-void sai (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void sai (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
 //cria e insere o evento sai
 void insere_sai (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
 

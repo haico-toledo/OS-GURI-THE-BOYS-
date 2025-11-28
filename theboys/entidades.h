@@ -78,16 +78,16 @@ int *B_local (struct base *b);
 void B_altera_lotacao (struct base *b, int controle);
 
 //insere heroi na base
-void B_insere_heroi (struct base *b, struct heroi *h);
+void B_insere_heroi (struct base *b, int id);
 
 //remove heroi da base
-void B_remove_heroi (struct base *b, struct heroi *h);
+void B_remove_heroi (struct base *b, int id);
 
 //insere heroi na fila de espera
-void B_insere_fila (struct base *b, struct heroi *h);
+void B_insere_fila (struct base *b, int id);
 
 //remove heroi na primeira posicao da espera
-void B_remove_fila (struct base *b, struct heroi *h);
+void B_remove_fila (struct base *b, int id);
 
 //retorna 1 se a base esta cheia e 0 caso contrario
 void B_cheia (struct base *b);

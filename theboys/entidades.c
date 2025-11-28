@@ -132,20 +132,20 @@ void B_altera_lotacao (struct base *b, int controle) {
 		b->lotacao--;
 }
 
-void B_insere_heroi (struct base *b, struct heroi *h) {
-	cjto_insere(&b, h->id);
+void B_insere_heroi (struct base *b, int id) {
+	cjto_insere(&b, id);
 }
 
-void B_remove_heroi (struct base *b, struct heroi *h) {
-	cjto_retira(&b, h->id);
+void B_remove_heroi (struct base *b,int id) {
+	cjto_retira(&b, id);
 }
 
-void B_insere_fila (struct base *b, struct heroi *h) {
-	fila_insere(b->espera, h->id);
+void B_insere_fila (struct base *b, int id) {
+	fila_insere(b->espera, id);
 }
 
-void B_remove_fila (struct base *b, struct heroi *h) {
-	fila_retira(b->espera, h->id);
+void B_remove_fila (struct base *b, int id) {
+	fila_retira(b->espera, id);
 }
 
 int B_cheia (struct base *b) {
