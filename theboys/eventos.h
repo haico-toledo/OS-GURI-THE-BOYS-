@@ -34,14 +34,14 @@ struct E_avisa {
 
 struct E_entra {
 	int tempo;
-	struct heroi *h;
+	int H_id; //id do heroi
 	struct base *b;	
 	int tipo;
 };
 
 struct E_sai {
 	int tempo;
-	struct heroi *h;
+	int H_id; //id do heroi
 	struct base *b;	
 	int tipo;
 };
@@ -49,6 +49,7 @@ struct E_sai {
 struct E_viaja {
 	int tempo;
 	struct heroi *h;
+	struct base *b;	
 	struct base *d;	
 	int tipo;
 };
@@ -73,54 +74,54 @@ struct E_fim {
 
 
 //executa o evento chega
-void chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 //cria e insere o evento chega
-void insere_chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void insere_chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 
 //executa o evento espera
-void espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
+void espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct heroi **herois);
 //cria e insere o evento espera
-void insere_espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void insere_espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 
 //executa o evento desiste
-void desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 //cria e insere o evento desiste
-void insere_desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void insere_desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 
 //executa o evento avisa
-void avisa (int t, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
+void avisa (int t, struct base *b, struct fprio_t *lef, struct heroi **herois);
 //cria e insere o evento avisa
-void insere_avisa (int t, struct base *b, struct fprio_t *lef, int *tipo);
+void insere_avisa (int t, struct base *b, struct fprio_t *lef);
 
 //executa o evento entra
-void entra (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
+void entra (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois);
 //cria e insere o evento entra
-void insere_entra (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void insere_entra (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 
 //executa o evento sai
-void sai (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo);
+void sai (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois);
 //cria e insere o evento sai
-void insere_sai (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void insere_sai (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 
 //executa o evento viaja
-void viaja (int t, struct heroi *h, struct base *d, struct fprio_t *lef, int *tipo);
+void viaja (int t, struct heroi *h, struct base *b, struct base *d, struct fprio_t *lef);
 //cria e insere o evento viaja
-void insere_viaja (int t, struct heroi *h, struct base *d, struct fprio_t *lef, int *tipo);
+void insere_viaja (int t, struct heroi *h, struct base *d, struct fprio_t *lef);
 
 //executa o evento morre
-void morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct heroi **herois);
 //cria e insere o evento morre
-void insere_morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
+void insere_morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef);
 
 //executa o evento missao
-void missao (int t, struct missao *m, struct fprio_t *lef, int *tipo);
+void missao (int t, int *n_v, int n_bases, struct missao *m, struct base **bases, struct heroi **herois, struct fprio_t *lef);
 //cria e insere o evento missao
-void insere_missao (int t, struct missao *m, struct fprio_t *lef, int *tipo);
+void insere_missao (int t, struct missao *m, struct fprio_t *lef);
 
 //executa o evento fim
-void fim (int t, struct fprio_t *lef, int *tipo);
+void fim (int t, struct fprio_t *lef);
 //cria e insere o evento fim
-void insere_fim (int t, struct fprio_t *lef, int *tipo);
+void insere_fim (int t, struct fprio_t *lef);
 
 
 

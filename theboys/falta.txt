@@ -3,8 +3,14 @@ fazer funcao B_espera_vazia (entidades) FEITO
 falta fazer a funcao inicializar nos arquivos de entidade. (base e missao faltam) FEITO
 fazer funcoes cria heroi, base, missao dinamicas!!!! FEITO
 fazer funcoes destroi heroi, base, missao FEITO
+criar campo vivo no struct heroi FEITO
+iniciar campo vivo com 1 para todos os herois FEITO
 
-padronizar o estilo de codigo:
+compilacao e make:
+
+
+
+padronizar o estilo de codigo e possiveis problemas:
 	chaves
 	parenteses das funcoes
 	colocar as funcoes inicializa proximas dos structs no entidades .c e .h
@@ -18,6 +24,7 @@ comentar os eventos.h
 remover comentarios com ** (theboys.c)
 testar todos os parametros com ponteiro (alocado) das funcoes antes de usar (todos os arquivos)
 ajustar a ordem dos parametros nas funcoes, struct primeiro int depois
+ver se destrui os conjuntos, fprios e filas
 
 PROGRAMA PRINCIPAL:
 	fazer funcao inicializa mundo FEITO
@@ -36,10 +43,11 @@ PROGRAMA PRINCIPAL:
 		inserir o evento fim na lef com prio tempo_max} FEITO
 		
 	entrar no laco principal que depende do (nao fim) 
-		remove um evento da lef e coloca o tipo numa variavel TIPO
-		switch com a variavel tipo
-			chama a funcao do evento com base no tipo (executa o evento)
-		aumenta o numero de eventos tratados
+		remove um evento da lef e coloca-o numa variavel
+		se heroi vivo (1)
+			switch com a variavel->tipo
+				chama a funcao do evento com base no tipo (executa o evento)
+				aumenta o numero de eventos tratados
 	ver quais variaveis preciso adicionar no codigo principal para fazer as estatisticas
 		
 	lembrar de desalocar:
@@ -47,6 +55,14 @@ PROGRAMA PRINCIPAL:
 	entidades (theboys.h) --- tem as funcoes para dar o free
 	
 	EVENTOS:
+		tirar o parametro tipo das funcoes x FEITO
+		arrumar os structs das funcoes x com base nos parametros FEITO
+		arrumar as funcoes insere_x com base nas funcoes x FEITO
+		
 		fazer o print das funcoes
-		eventos futuros de herois mortos devem ser ignorados (checar sempre se ta vivo)
+		eventos futuros de herois mortos devem ser ignorados (checar sempre se ta vivo) OUTRA ALT. (1)
+		mudar os comentarios sobre as funcoes x do eventos.c
+		comentar o codigo das funcoes do eventos.c
+
+		
 		

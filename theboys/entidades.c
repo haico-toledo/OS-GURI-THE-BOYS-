@@ -24,6 +24,7 @@ struct heroi {
 	int *velocidade;			// velocidade de deslocamento
 	int *xp; 					// qtd de missoes ja feitas
 	int *base; 					// id da base atual
+	int *vivo;					// 1 se esta vivo, 0 se esta morto
 };
 
 struct heroi *H_cria (int id) {
@@ -33,6 +34,7 @@ struct heroi *H_cria (int id) {
 	h->paciencia = aleat(MIN_PAC, MAX_PAC);											//paciencia entre 0 e 100
 	h->velocidade = aleat(MIN_VEL, MAX_VEL); 										//velocidade entre 50 e 5000
 	h->habilidades = cjto_aleat(aleat(MIN_HAB_HEROI, MAX_HAB_HEROI), N_HAB_TOTAL);	//sorteia de 1 a 3 habilidades das 10 possiveis
+	h->vivo = 1; 																	//o heroi eh inicializado vivo
 	
 	return h;
 	
@@ -168,6 +170,7 @@ struct missao {
 	int *id; 					// identificador numerico
 	struct cjto_t *habilidades;	// conjunto de habilidades necessarias
 	int *local[2];				// localizacao cartesiana da missao
+	int *feita; 				//1 se foi cumprida, 0 se nao foi
 };
 
 struct missao *MI_cria (int id, int local[2]) {
@@ -175,6 +178,7 @@ struct missao *MI_cria (int id, int local[2]) {
 	m->id = id;
 	m->local = local;
 	m->habilidades = cjto_aleat(aleat(MIN_HAB_MISSAO, N_HAB_TOTAL), N_HAB_TOTAL);
+	m->feita = 0;
 	
 	return m;
 }

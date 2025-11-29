@@ -18,8 +18,39 @@
 #define N_HEROIS       (N_HABILIDADES * 5)
 #define N_BASES        (N_HEROIS / 5)
 
+//retorna o quadrado da distancia cartesiana entre dois pontos
+int dist_cart (int xi, int yi, int xi, int xii) {
+	int dist = (xi - xii)*(xi - xii) + (yi - yii)*(yi - yii);
+		if (dist >= 0)
+			return dist;
+		else
+			return -dist; 
+} 
 
-void chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo) {
+//ordena as bases de acordo com a distancia de uma missao dada
+void ordena_bases(struct base **bases, int local_m[2], int n_bases)
+{
+	struct base *aux;
+	int i, j, menor;
+	
+	for (i = 0; i < n - 1; i++)
+	{
+		menor = i;
+		for (j = i + 1; j < n; j++)
+		{
+			//distancia da bmp for maior que da base j
+			if (dist_cart(bases[menor]->local[0], local_m[0], bases[menor]->local[1], local_m[1]) > dist_cart(bases[j]->local[0], local_m[0], bases[j]->local[1], local_m[1])) 
+				menor = j;    
+		}
+		
+		aux = (*)bases[i];
+		bases[i] = bases[menor];
+		(*)bases[menor] = aux;
+	}
+}
+
+
+void chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef) {
 	
 	h->base = b;
 	
@@ -36,8 +67,8 @@ void chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *ti
 		insere_desiste(t, h, b, lef, TP_DESISTE);
 }
 
-//cria e insere um evento chega
-void insere_chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo) {
+
+void insere_chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef) {
 	struct E_chega *c = malloc(sizeof(struct E_chega));
 	
 	if (!c)
@@ -52,15 +83,15 @@ void insere_chega (int t, struct heroi *h, struct base *b, struct fprio_t *lef, 
 	fprio_insere (lef, c, tipo, t);
 }
 
-//executa o evento espera
-void espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct heroi **herois int *tipo) {
+
+void espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct heroi **herois) {
 	fila_insere (b->espera, h->id);
 	
 	insere_avisa(t, b, lef, herois, tipo);
 }
 
-//cria e insere um evento espera
-void insere_espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo) {
+
+void insere_espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef) {
 	struct E_espera *e = malloc(sizeof(struct E_espera));
 
 	if (!e)
@@ -75,15 +106,15 @@ void insere_espera (int t, struct heroi *h, struct base *b, struct fprio_t *lef,
 	fprio_insere (lef, e, tipo, t);
 }
 
-//executa o evento desiste
-void desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct base **bases int *tipo) {
+
+void desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct base **bases) {
 	int nova_base = aleat(0, N_BASES-1);
 	
 	insere_viaja(t, h, bases[nova_base], lef, TP_VIAJA);
 }
 
-//cria e insere um evento desiste
-void insere_desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo) {
+
+void insere_desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef) {
 	struct E_desiste *d = malloc(sizeof(struct E_desiste));
 
 	if (!d)
@@ -98,8 +129,8 @@ void insere_desiste (int t, struct heroi *h, struct base *b, struct fprio_t *lef
 	fprio_insere (lef, d, tipo, t);
 }
 
-//executa o evento avisa
-void avisa (int t, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo) {
+
+void avisa (int t, struct base *b, struct fprio_t *lef, struct heroi **herois) {
 	int id_ret;
 	
 	while(!B_cheia(b) && !B_espera_vazia(b)) {
@@ -109,8 +140,8 @@ void avisa (int t, struct base *b, struct fprio_t *lef, struct heroi **herois, i
 	}
 }
 
-//cria e insere um evento avisa
-void insere_avisa (int t, struct base *b, struct fprio_t *lef, int *tipo) {
+
+void insere_avisa (int t, struct base *b, struct fprio_t *lef) {
 	struct E_avisa *a = malloc(sizeof(struct E_avisa));
 
 	if (!a)
@@ -124,22 +155,22 @@ void insere_avisa (int t, struct base *b, struct fprio_t *lef, int *tipo) {
 	fprio_insere (lef, a, tipo, t);
 }
 
-//executa o evento entra
-void entra (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo) {
+
+void entra (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois) {
 	int tpb = 15 + herois[id]->paciencia * aleat(1, 20);
 	
 	insere_sai(t + tpb, id, b, lef, herois, TP_SAI);	
 }
 
-//cria e insere um evento entra
-void insere_entra (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo) {
+
+void insere_entra (int t, int H_id, struct base *b, struct fprio_t *lef) {
 	struct E_entra *e = malloc(sizeof(struct E_entra));
 
 	if (!e)
 		return;
 	//atribui os parametros ao novo evento
 	e->tempo = t;
-	e->h = h;
+	e->H_id = H_id;
 	e->b = b;
 	e->tipo = tipo;
 
@@ -147,8 +178,8 @@ void insere_entra (int t, struct heroi *h, struct base *b, struct fprio_t *lef, 
 	fprio_insere (lef, e, tipo, t);
 }
 
-//executa o evento sai
-void sai (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois, int *tipo) {
+
+void sai (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **herois) {
 	int nova_base;
 	
 	cjto_retira (b->presentes, id);
@@ -158,15 +189,15 @@ void sai (int t, int id, struct base *b, struct fprio_t *lef, struct heroi **her
 	insere_avisa(t, b, lef, herois, TP_AVISA);
 }
 
-//cria e insere um evento sai
-void insere_sai (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo) {
+
+void insere_sai (int t, int H_id, struct base *b, struct fprio_t *lef) {
 	struct E_sai *s = malloc(sizeof(struct E_sai));
 
 	if (!s)
 		return;
 	//atribui os parametros ao novo evento
 	s->tempo = t;
-	s->h = h;
+	s->H_id = H_id;
 	s->b = b;
 	s->tipo = tipo;
 
@@ -174,10 +205,17 @@ void insere_sai (int t, struct heroi *h, struct base *b, struct fprio_t *lef, in
 	fprio_insere (lef, s, tipo, t);
 }
 
-//executa o evento viaja
-void viaja (int t, struct heroi *h, struct base *d, struct fprio_t *lef, int *tipo);
-//cria e insere um evento viaja
-void insere_viaja (int t, struct heroi *h, struct base *d, struct fprio_t *lef, int *tipo) {
+
+void viaja (int t, struct heroi *h, struct base *b, struct base *d, struct fprio_t *lef) {
+	int dist, dura;
+	
+	dist = dist_cart(d->local[0], d->local[1], b->local[0], b->local[1]);
+	dura = dist/h->velocidade;
+	insere_chega(t + dura, h, b, d, lef, TP_CHEGA);
+}
+
+
+void insere_viaja (int t, struct heroi *h, struct base *b, struct base *d, struct fprio_t *lef) {
 	struct E_viaja *v = malloc(sizeof(struct E_viaja));
 
 	if (!v)
@@ -185,6 +223,7 @@ void insere_viaja (int t, struct heroi *h, struct base *d, struct fprio_t *lef, 
 	//atribui os parametros ao novo evento
 	v->tempo = t;
 	v->h = h;
+	v->b = b;
 	v->d = d;
 	v->tipo = tipo;
 
@@ -192,10 +231,17 @@ void insere_viaja (int t, struct heroi *h, struct base *d, struct fprio_t *lef, 
 	fprio_insere (lef, v, tipo, t);
 }
 
-//executa o evento morre
-void morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo);
-//cria e insere um evento morre
-void insere_morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef, int *tipo) {
+
+void morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef, struct heroi **herois) {	
+	cjto_retira(b->presentes, h->id);
+	
+	h->vivo = 0;
+	
+	insere_avisa(t, b, lef, herois);
+}
+
+
+void insere_morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef) {
 	struct E_morre *m = malloc(sizeof(struct E_morre));
 
 	if (!m)
@@ -210,10 +256,44 @@ void insere_morre (int t, struct heroi *h, struct base *b, struct fprio_t *lef, 
 	fprio_insere (lef, m, tipo, t);
 }
 
-//executa o evento missao
-void missao (int t, struct missao *m, struct fprio_t *lef, int *tipo);
-//cria e insere um evento missao
-void insere_missao (int t, struct missao *m, struct fprio_t *lef, int *tipo) {
+
+void missao (int t, int *n_v, int n_bases, struct missao *m, struct base **bases, struct heroi **herois, struct fprio_t *lef) {
+	int bmp, achou = 0, i, j;
+	struct cjto_t *aux = cjto_cria(N_HABILIDADES);
+	
+	//ordena bases por distancia
+	ordena_bases(bases, m->local, n_bases);
+	
+	//acha bmp
+	i = 0;
+	while (i < N_BASES && !achou) {
+		for (j=0; j < N_HEROIS; j++)
+			aux = cjto_uniao(aux, herois[j]->habilidades);
+		if (cjto_contem(aux, m->habilidades))
+			achou = 1;
+	}
+	
+	if (achou) {
+		bmp = i;
+		//aumentar a xp dos herois da bmp
+		for (i=0; i < N_HEROIS; i++) {
+			if (cjto_pertence(bases[bmp]->presentes, i))
+				herois[i]->xp++;
+		}
+		m->feita = 1;
+	}
+	
+	else
+		bmp = bases[0];
+		if (n_v > 0 && t % 2500 == 0) {
+			n_v--;
+			m->feita = 1;
+			//mata o mais xp da base
+		}
+}
+
+
+void insere_missao (int t, struct missao *m, struct fprio_t *lef) {
 	struct E_missao *e = malloc(sizeof(struct E_missao));
 
 	if (!e)
@@ -227,10 +307,10 @@ void insere_missao (int t, struct missao *m, struct fprio_t *lef, int *tipo) {
 	fprio_insere (lef, e, tipo, t);
 }
 
-//executa o evento fim
-void fim (int t, struct fprio_t *lef, int *tipo);
-//cria e insere um evento fim
-void insere_fim (int t, struct fprio_t *lef, int *tipo) {
+
+void fim (int t, struct fprio_t *lef);
+
+void insere_fim (int t, struct fprio_t *lef) {
 	struct E_fim *f = malloc(sizeof(struct E_fim));
 
 	if (!f)
