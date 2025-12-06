@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "entidades.h"
 #include "conjunto.h"
 #include "fila.h"
@@ -12,20 +15,10 @@
 #define MAX_LOT_BASE 10
 #define MIN_HAB_MISSAO 6
 
-int aleat (int min, int max) 
+int aleat (int min, int max) {
 	return rand() % (max - min + 1) + min;
-
+}
 //heroi
-
-struct heroi {
-	int *id; 					// identificador numerico 
-	struct cjto_t *habilidades;	// conjunto de habilidades 
-	int *paciencia; 			// nivel de paciencia 
-	int *velocidade;			// velocidade de deslocamento
-	int *xp; 					// qtd de missoes ja feitas
-	int *base; 					// id da base atual
-	int *vivo;					// 1 se esta vivo, 0 se esta morto
-};
 
 struct heroi *H_cria (int id) {
 	struct heroi *h = malloc(sizeof(struct heroi));
@@ -50,7 +43,7 @@ int H_id (struct heroi *h) {
 }
 
 struct cjto_t H_habilidades (struct heroi *h) {
-	return h->habilidades;
+	return *h->habilidades;
 }
 
 int H_paciencia (struct heroi *h) {
@@ -76,25 +69,20 @@ void H_incrementa_xp (struct heroi *h) {
 
 //altera a base atual do heroi
 void H_muda_base (struct heroi *h, struct base *nova) {
-	heroi->base = nova;
+	h->base = nova->id;
 }
 
 
 //base
 
-struct base {
-	int *id;					// identificador numerico
-	int *lotacao;				// maximo de herois 
-	struct cjto_t *presentes;	// conjunto de herois na base
-	struct fila_t *espera;		// fila de herois esperando para entrar
-	int *local[2];				// localizacao cartesiana da base
-};
-
 struct base *B_cria (int id, int local[2]) {
 	struct base *b = malloc(sizeof(struct base));
 	b->id = id;
-	b->local = local;
+	b->local[0] = local[0];
+	b->local[1] = local[1];
 	b->lotacao = aleat(MIN_LOT_BASE, MAX_LOT_BASE);
+	b->lot_max = 0;
+	b->mi_feitas = 0;
 	b->presentes = cjto_cria(b->lotacao);
 	b->espera = fila_cria();
 	
@@ -115,12 +103,20 @@ int B_lotacao (struct base *b) {
 	return b->lotacao;
 }
 
-struct cjto_t B_presentes (struct base *b) {
-	return b->presentes;
+int B_lot_max (struct base *b) {
+	return b->lot_max;
 }
 
-struct cjto_t B_espera (struct base *b) {
-	return b->espera;
+int B_mi_feitas (struct base *b) {
+	return b->mi_feitas;
+}
+
+struct cjto_t B_presentes (struct base *b) {
+	return *b->presentes;
+}
+
+struct fila_t B_espera (struct base *b) {
+	return *b->espera;
 }
 
 int *B_local (struct base *b) {
@@ -135,11 +131,11 @@ void B_altera_lotacao (struct base *b, int controle) {
 }
 
 void B_insere_heroi (struct base *b, int id) {
-	cjto_insere(&b, id);
+	cjto_insere(b->presentes, id);
 }
 
 void B_remove_heroi (struct base *b,int id) {
-	cjto_retira(&b, id);
+	cjto_retira(b->presentes, id);
 }
 
 void B_insere_fila (struct base *b, int id) {
@@ -147,7 +143,7 @@ void B_insere_fila (struct base *b, int id) {
 }
 
 void B_remove_fila (struct base *b, int id) {
-	fila_retira(b->espera, id);
+	fila_retira(b->espera, &id);
 }
 
 int B_cheia (struct base *b) {
@@ -157,6 +153,13 @@ int B_cheia (struct base *b) {
 	return 0;
 }	
 
+int B_vazia (struct base *b) {
+	if (cjto_card(b->presentes) == 0)
+		return 1;
+		
+	return 0;
+}
+
 int B_espera_vazia (struct base *b) {
 	if (fila_tamanho(b->espera) == 0)
 		return 1;
@@ -164,21 +167,20 @@ int B_espera_vazia (struct base *b) {
 	return 0;
 }
 
-//missao
+int B_qtd_herois (struct base *b) {
+	return cjto_card(b->presentes);
+}
 
-struct missao {
-	int *id; 					// identificador numerico
-	struct cjto_t *habilidades;	// conjunto de habilidades necessarias
-	int *local[2];				// localizacao cartesiana da missao
-	int *feita; 				//1 se foi cumprida, 0 se nao foi
-};
+//missao
 
 struct missao *MI_cria (int id, int local[2]) {
 	struct missao *m = malloc(sizeof(struct missao));
 	m->id = id;
-	m->local = local;
+	m->local[0] = local[0];
+	m->local[1] = local[1];
 	m->habilidades = cjto_aleat(aleat(MIN_HAB_MISSAO, N_HAB_TOTAL), N_HAB_TOTAL);
 	m->feita = 0;
+	m->tentativas = 0;
 	
 	return m;
 }
@@ -193,7 +195,7 @@ int MI_id (struct missao *m) {
 }
 
 struct cjto_t MI_habilidades (struct missao *m) {
-	return m->habilidades;
+	return *m->habilidades;
 }
 
 int *MI_local (struct missao *m) {

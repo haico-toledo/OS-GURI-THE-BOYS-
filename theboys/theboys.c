@@ -4,6 +4,7 @@
 // seus #includes vão aqui
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "conjunto.h"
 #include "fprio.h"
 #include "fila.h"
@@ -34,28 +35,32 @@
 // minimize o uso de variáveis globais
 
 struct mundo {
-	int *n_herois;				// numero de herois
+	int n_herois;				// numero de herois
 	struct heroi **herois;		// vetor com os herois
-	int *n_bases;				// numero de bases
+	int n_bases;				// numero de bases
 	struct base **bases;		// vetor com as bases
-	int *n_missoes;				// numero de missoes a cumprir
+	int n_missoes;				// numero de missoes a cumprir
 	struct missao **missoes;	// vetor com as missoes
-	int *n_habilidades;			// numero de habilidades distintas
-	int *n_compostos_v;			// quantidade de composto V disponivel
-	int *tamanho_mundo;			// maior coordenada cartesiana
-	long *relogio;				// tempo atual do mundo
-}
+	int n_habilidades;			// numero de habilidades distintas
+	int n_compostos_v;			// quantidade de composto V disponivel
+	int tamanho_mundo_x;		// maior coordenada cartesiana
+	int tamanho_mundo_y;		// maior coordenada cartesiana
+	long relogio;				// tempo atual do mundo
+};
 
 //atribui os valores iniciais para os parametros
 //do mundo
 void inicializa_mundo (struct mundo *m) {
 	m->n_herois = N_HEROIS;
+	m->herois = malloc(sizeof(struct heroi) * N_HEROIS + 1);	//malloc vetor herois
 	m->n_bases = N_BASES;
+	m->bases = malloc(sizeof(struct base) * N_BASES + 1);		//malloc vetor bases
 	m->n_missoes = N_MISSOES;
+	m->missoes = malloc(sizeof(struct missao) * N_MISSOES + 1); //malloc vetor missoes
 	m->n_habilidades = N_HABILIDADES;
 	m->n_compostos_v = N_COMPOSTOS_V;
-	m->tamanho_mundo[0] = N_TAMANHO_MUNDO;
-	m->tamanho_mundo[1] = N_TAMANHO_MUNDO;
+	m->tamanho_mundo_x = N_TAMANHO_MUNDO;
+	m->tamanho_mundo_y = N_TAMANHO_MUNDO;
 	m->relogio = T_INICIO;
 }
 
@@ -65,12 +70,21 @@ int main ()
 {
 	struct mundo *m = malloc(sizeof(struct mundo));	//malloc mundo ** poderia ser uma funcao cria_mundo
 	struct fprio_t *lef;
-	int i;
-	int base_aux;
-	int tempo_aux;
-	int local_aux[2];
-	int continua = 1;	
+	int i, base_aux, tempo_aux, local_aux[2], continua = 1, tipo, prio;
+	int eventos_tratados = 0;
+	void *evento;
+	struct E_chega *aux_chega;
+	struct E_espera *aux_espera;
+	struct E_desiste *aux_desiste;
+	struct E_avisa *aux_avisa;
+	struct E_entra *aux_entra;
+	struct E_sai *aux_sai;
+	struct E_viaja *aux_viaja;
+	struct E_morre *aux_morre;
+	struct E_missao *aux_missao;
+	//struct E_fim *aux_fim;
 	
+	srand(time(NULL));
 	
 	// inicia o mundo
 	inicializa_mundo(m);
@@ -81,20 +95,23 @@ int main ()
 	for (i=0; i < N_HEROIS; i++) {					//malloc herois **
 		m->herois[i] = H_cria(i); 
 	}
+	m->herois[N_HEROIS] = NULL;
 	
 	//bases	- podia ser funcao **				
 	for (i=0; i < N_BASES; i++) {					//malloc bases **
 		local_aux[0] = aleat(0, N_TAMANHO_MUNDO);
 		local_aux[1] = aleat(0, N_TAMANHO_MUNDO);
-		m->bases[i] = B_cria(i, local); 
+		m->bases[i] = B_cria(i, local_aux); 
 	}
+	m->bases[N_BASES] = NULL;
 	
 	//missoes - podia ser funcao **
 	for (i=0; i < N_MISSOES; i++) {					//malloc missoes **
 		local_aux[0] = aleat(0, N_TAMANHO_MUNDO);
 		local_aux[1] = aleat(0, N_TAMANHO_MUNDO);
-		m->missoes[i] = MI_cria(i, local); 
+		m->missoes[i] = MI_cria(i, local_aux); 
 	}
+	m->missoes[N_MISSOES] = NULL;
 	
 	//cria e inicializa a lef
 	lef = fprio_cria();
@@ -117,6 +134,76 @@ int main ()
 	
 	//loop principal
 	while (continua) {
+		evento = fprio_retira(lef, &tipo, &prio);
+		eventos_tratados++;
+		switch (tipo) {
+			case TP_CHEGA:
+				aux_chega = (struct E_chega *) evento;
+				if (aux_chega->h->vivo)
+					chega(prio, aux_chega->h, aux_chega->b, lef);
+				free(aux_chega);
+				break;
+				
+			case TP_ESPERA:
+				aux_espera = (struct E_espera *) evento;
+				if (aux_espera->h->vivo)
+					espera(prio, aux_espera->h, aux_espera->b, lef);
+				free(aux_espera);
+				break;
+			
+			case TP_DESISTE:
+				aux_desiste = (struct E_desiste *) evento;
+				if (aux_desiste->h->vivo)
+					desiste(prio, aux_desiste->h, aux_desiste->b, lef, m->bases);
+				free(aux_desiste);
+				break;
+			
+			case TP_AVISA:
+				aux_avisa = (struct E_avisa *) evento;
+				avisa(prio, aux_avisa->b, lef);
+				free(aux_avisa);
+				break;
+				
+			case TP_ENTRA:
+				aux_entra = (struct E_entra *) evento;
+				if (m->herois[aux_entra->h_id]->vivo)
+					entra(prio, aux_entra->h_id, aux_entra->b, lef, m->herois);
+				free(aux_entra);
+				break;
+				
+			case TP_SAI:
+				aux_sai = (struct E_sai *) evento;
+				if (m->herois[aux_sai->h_id]->vivo)
+					sai(prio, aux_sai->h_id, aux_sai->b, lef, m->herois, m->bases);
+				free(aux_sai);
+				break;
+				
+			case TP_VIAJA:
+				aux_viaja = (struct E_viaja *) evento;
+				if (aux_viaja->h->vivo)
+					viaja(prio, aux_viaja->h, aux_viaja->b, aux_viaja->d, lef);
+				free(aux_viaja);
+				break;
+				
+			case TP_MORRE:
+				aux_morre = (struct E_morre *) evento;
+				if (aux_morre->h->vivo)
+					morre(prio, aux_morre->m_id, aux_morre->h, aux_morre->b, lef);
+				free(aux_morre);
+				break;
+				
+			case TP_MISSAO:
+				aux_missao = (struct E_missao *) evento;
+				missao(prio, &m->n_compostos_v, m->n_bases, aux_missao->m, m->bases, m->herois, lef);
+				free(aux_missao);
+				break;
+			
+			case TP_FIM:
+				//aux_fim = (struct E_fim *) evento;
+				fim(prio, eventos_tratados, m->herois, m->bases, m->missoes);
+				continua = 0;
+				break;
+		}
 	
 	}	
 	

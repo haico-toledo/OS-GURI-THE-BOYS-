@@ -25,6 +25,7 @@ remover comentarios com ** (theboys.c)
 testar todos os parametros com ponteiro (alocado) das funcoes antes de usar (todos os arquivos)
 ajustar a ordem dos parametros nas funcoes, struct primeiro int depois
 ver se destrui os conjuntos, fprios e filas
+ver onde violo o tad no eventos.c e no theboys e fazer funcoes para resolver
 
 PROGRAMA PRINCIPAL:
 	fazer funcao inicializa mundo FEITO
@@ -49,6 +50,7 @@ PROGRAMA PRINCIPAL:
 				chama a funcao do evento com base no tipo (executa o evento)
 				aumenta o numero de eventos tratados
 	ver quais variaveis preciso adicionar no codigo principal para fazer as estatisticas
+	talvez precise dar malloc nos vetores herois, bases e missoes ou declarar o tamanho deles no inicio
 		
 	lembrar de desalocar:
 	mundo (theboys.c) --- nao tem funcao
@@ -58,11 +60,15 @@ PROGRAMA PRINCIPAL:
 		tirar o parametro tipo das funcoes x FEITO
 		arrumar os structs das funcoes x com base nos parametros FEITO
 		arrumar as funcoes insere_x com base nas funcoes x FEITO
+		eventos futuros de herois mortos devem ser ignorados (checar sempre se ta vivo) OUTRA ALT. (1)
 		
 		fazer o print das funcoes
-		eventos futuros de herois mortos devem ser ignorados (checar sempre se ta vivo) OUTRA ALT. (1)
 		mudar os comentarios sobre as funcoes x do eventos.c
 		comentar o codigo das funcoes do eventos.c
-
+		falta terminar o fim direito FEITO
+		dar um jeito de colocar NULL no fim do vetor de bases, se precisar nos outros tbm
+		fazer o retorno dos campos da missao no entidades.h (feita e tentativas)
 		
-		
+		padronizar se o local vai ser sempre [0..1] ou sempre x e y!!!
+		prints nao podem ter mais de 80 caracteres (quebre a linha se for o caso)
+		na funcao de imprimir as bases do FIM, era pra colocar o maximo que ja teve na fila de espera e nao na base!!!
